@@ -30,12 +30,19 @@ module.exports = function (grunt) {
       }
     },
     imagemin: {
-      files: {
-        expand: true,
-        src: ['./images/*.png'],
-        dest: 'dist/'
+      /* 压缩图片大小 */
+      dist: {
+          options: {
+              optimizationLevel: 1 //定义 PNG 图片优化水平
+          },
+          files: [{
+              expand: true,
+              cwd: './images', //原图存放的文件夹
+              src: ['**/*.{png,jpg,jpeg,gif}'], // 优化 img 目录下所有 png/jpg/jpeg/gif图片
+              dest: 'dist/img/' // 优化后的图片保存位置，覆盖旧图片，并且不作提示
+          }]
       }
-    },
+  },
     copy: {
       html: {
         src: './index.html',
@@ -44,19 +51,19 @@ module.exports = function (grunt) {
     },
     concat: {
       js: {
-        src: ['js/*.js', './com/**/*.js'],
-        dest: 'dist/bundle.js'
+        src: ['js/*.js'],
+        dest: 'distndle.js'
       },
       css: {
-        src: ['css/*.css', './com/**/*.css'],
-        dest: 'dist/bundle.css'
+        src: ['css/*.css'],
+        dest: 'distndle.css'
       }
     },
     uglify: {
-      'dist/bundle.min.js': 'dist/bundle.js'
+      'distndle.min.js': 'distndle.js'
     },
     cssmin: {
-      'dist/bundle.min.css': 'dist/bundle.css'
+      'distndle.min.css': 'distndle.css'
     },
     useminPrepare: {
       html: 'index.html',
@@ -68,7 +75,7 @@ module.exports = function (grunt) {
       html: ['dist/index.html']
     },
     clean: {
-      end: ['dist/bundle.css', 'dist/bundle.js', '.tmp']
+      end: ['distndle.css', 'distndle.js', '.tmp']
     }
   });
 
@@ -85,6 +92,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-usemin');
 
-  grunt.registerTask('lint', ['htmlhint', 'csslint', 'eslint']);
-  grunt.registerTask('release', ['copy:html', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin', 'htmlmin', 'imagemin', 'clean:end']);
+  grunt.registerTask('release', ['copy:html', 'useminPrepare', 'concat', 'uglify', 'cssmin', 'usemin', 'htmlmin', 'clean:end']);
 };
